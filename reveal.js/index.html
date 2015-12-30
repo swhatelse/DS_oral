@@ -42,7 +42,7 @@
 			<div class="slides">
 				<section style="height:100%">
 					<div style="top:10%; width:100%; position:absolute">
-					<h3>In Search of an Understandable Consensus Algoritm</h3>
+					<h3>In Search of an Understandable Consensus Algorithm</h3>
 					<p>Diego Ongaro and John Ousterhout</p>
 					<p>Stanford University</p>
 					<p>USENIX ATC 2014</p>
@@ -52,15 +52,25 @@
 						<small>Steven QUINITO MASNADA</small>
 					</div>
 				</section>
+
 				<section>
 					<h2>Topic</h2>
 					<ol>
-						<li>Introduction</li>
-						<li>Replicated state machines</li>
-						<li>Raft</li>
-						<li>Conclusion</li>
+					    <li><b>Introduction</b></li>
+					    <li>Raft</li>
+                                            <ol>
+                                                <li>Design</li>
+                                                <li>Election leader</li>
+                                                <li>Logs replication</li>
+                                            </ol>
+                                            <li>Evaluation</li>
+					    <li>Conclusion</li>
 					</ol>
 				</section>
+
+                                <!-- ************************************************************************** -->
+                                <!--                               Table of content                             -->
+                                <!-- ************************************************************************** -->
 				<section>
 					<section>
 						<h1>Introduction</h1>
@@ -81,42 +91,49 @@
 							</ul>
 						</ul>
 					</section>
-					<section>
-						<h2>Particularities</h2>
-						<ul>
-							<li>Decomposition</li>
-							<ul>
-								<li>Leader election</li>
-								<li>Logs replication</li>
-								<li>Safety</li>
-							</ul>
-							<li>State space reduction</li>
-							<ul>
-								<li>Reduce non-determinism</li>
-								<li>Reducde the way server are consistents</li>
-							</ul>
-							<li>Use of novel features</li>
-							<ul>
-								<li>Stronger leader</li>
-								<li>Leader election &#x2192 randomized timers </li>
-								<li>Membership changes &#x2192 joint consensus</li>
-							</ul>
-						</ul>
-					</section>
+					<!-- <section> -->
+					<!-- 	<h2>Particularities</h2> -->
+					<!-- 	<ul> -->
+					<!-- 		<li>Decomposition</li> -->
+					<!-- 		<ul> -->
+					<!-- 			<li>Leader election</li> -->
+					<!-- 			<li>Logs replication</li> -->
+					<!-- 			<li>Safety</li> -->
+					<!-- 		</ul> -->
+					<!-- 		<li>State space reduction</li> -->
+					<!-- 		<ul> -->
+					<!-- 			<li>Reduce non-determinism</li> -->
+					<!-- 			<li>Reducde the way server are consistents</li> -->
+					<!-- 		</ul> -->
+					<!-- 		<li>Use of novel features</li> -->
+					<!-- 		<ul> -->
+					<!-- 			<li>Stronger leader</li> -->
+					<!-- 			<li>Leader election &#x2192 randomized timers </li> -->
+					<!-- 			<li>Membership changes &#x2192 joint consensus</li> -->
+					<!-- 		</ul> -->
+					<!-- 	</ul> -->
+					<!-- </section> -->
 				</section>
 
+                                <!-- ************************************************************************** -->
+                                <!--                               Raft                                         -->
+                                <!-- ************************************************************************** -->
 				<section>
 					<h1>Raft</h1>
 				</section>
 				<section>
-					<h2>Replicated state machines</h2>
+                                    <section>
+                                        <h2>Design</h2>
+                                    </section>
+                                    <section>
+					<h3>Replicated state machines</h3>
 					<div><img src="./img/fig1.jpg"/ height="300"></div>
 					<p>
-						<ul>
-							<li>Safety &#x2192 never return a wrong result</li>
-							<li>Non-byzantine</li>
-							<li>Fail-stop</li>
-						</ul>
+					    <ul>
+						<li>Safety &#x2192 never return a wrong result</li>
+						<li>Non-byzantine</li>
+						<li>Fail-stop</li>
+					    </ul>
 					</p>
                                         <aside class="notes">
                                             <ul>
@@ -127,9 +144,9 @@
                                                 <li>Send result to client</li>
                                             </ul>
 					</aside>
-				</section>
-				
-				<section>
+                                    </section>
+				    
+				    <section>
 					<h2>Understandability</h2>
 					<ul>
 					    <li class="fragment">Problem decomposition:</li>
@@ -141,17 +158,29 @@
 					    </ul>
 					    <li class="fragment">Space state reduction &#x2192 reduce non-determinism</li>
 					</ul>
-				</section>
+				    </section>
 
-				<section>
-					<h2>Raft basics</h2>
-					<img src="./img/fig4.jpg"/ width="60%"/>
-					<img src="./img/fig5.jpg"/ width="60%"/>
+				    <section>
+					<h2>Time division</h2>
+					<img src="./img/fig5.jpg"/ width="70%"/>
+
+                                        <aside class="notes">
+                                            <ul>
+                                                <li>New election = new term </li>
+                                                <li>Logical clock for election and log replication</li>
+                                            </ul>
+					</aside>
+
+				    </section>
 				</section>
 
                                 <section>
                                     <section>
                                         <h2>Leader Election</h2>
+                                    </section>
+                                    <section>
+                                        <h3>Nodes states</h3>
+                                        <img src="./img/fig4.jpg"/ width="60%"/>
                                     </section>
                                     <section>
 					<iframe src="../thesecretlivesofdata/raft/index.html" width="80%" height="600" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
@@ -163,24 +192,64 @@
                                     <section>
                                         <h2>Log Replication</h2>
                                     </section>
+                                    
+                                    <section>
+                                        <h3>Logs structure</h3>
+                                        <img src="./img/fig6.jpg"/ width="60%"/>
+
+                                        <aside class="notes">
+                                            <p>Request handled by leader &#x2192 easier to have order</p>
+                                            <p>Logs have:</p>
+                                            <ul>
+                                                <li>Commands</li>
+                                                <li>Term number</li>
+                                                <li>Index</li>
+                                            </ul>
+                                        </aside>
+                                    </section>
+
                                     <section>
                                         <iframe src="../thesecretlivesofdata/raft/index.html" width="80%" height="600" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
                                     </section>
                                 </section>
                                 
                                 <section>
-                                    <h1>Evaluation</h1>
+                                    <section>
+                                        <h2>Membership changes</h2>
+                                    </section>
+
+                                    <section>
+                                        <h3>Joint Consensus</h3>
+                                        <div style="height:400px; left:50px; position:relative">
+                                            <div style="position:absolute">
+                                                <img src="./img/fig10.jpg"/ width="50%"/>
+                                            </div>
+                                            <div class="fragment" style="position:absolute; left:100px" >
+                                                <img src="./img/crossbar.png"/ width="50%" style="border:0; opacity:1"/>
+                                            </div>
+                                        </div>
+                                    </section>
+
                                 </section>
 
+                                <!-- ************************************************************************** -->
+                                <!--                               Evaluation                                   -->
+                                <!-- ************************************************************************** -->
                                 <section>
-                                    <h2>Understandability</h2>
-                                    <img src="./img/fig12.jpg"/ width="40%"/>
-				    <img src="./img/fig13.jpg"/ width="50%"/>
-                                </section>
+                                    <section>
+                                        <h1>Evaluation</h1>
+                                    </section>
 
-                                <section>
-                                    <h2>Performances</h2>
-                                    <img src="./img/fig14.jpg"/ width="60%"/>
+                                    <section>
+                                        <h2>Understandability</h2>
+                                        <img src="./img/fig12.jpg"/ width="40%"/>
+				        <img src="./img/fig13.jpg"/ width="50%"/>
+                                    </section>
+
+                                    <section>
+                                        <h2>Performances</h2>
+                                        <img src="./img/fig14.jpg"/ width="60%"/>
+                                    </section>
                                 </section>
 
                                 <section>
