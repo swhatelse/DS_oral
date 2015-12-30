@@ -125,6 +125,21 @@
                                     <section>
                                         <h2>Design</h2>
                                     </section>
+
+				    <section>
+					<h3>Understandability</h3>
+					<ul>
+					    <li class="fragment">Problem decomposition:</li>
+					    <ul>
+						<li class="fragment">Leader election</li>
+						<li class="fragment">Logs replication</li>
+						<li class="fragment">Safety</li>
+						<li class="fragment">View change</li>
+					    </ul>
+					    <li class="fragment">Space state reduction &#x2192 reduce non-determinism</li>
+					</ul>
+				    </section>
+
                                     <section>
 					<h3>Replicated state machines</h3>
 					<div><img src="./img/fig1.jpg"/ height="300"></div>
@@ -147,23 +162,20 @@
                                     </section>
 				    
 				    <section>
-					<h2>Understandability</h2>
-					<ul>
-					    <li class="fragment">Problem decomposition:</li>
-					    <ul>
-						<li class="fragment">Leader election</li>
-						<li class="fragment">Logs replication</li>
-						<li class="fragment">Safety</li>
-						<li class="fragment">View change</li>
-					    </ul>
-					    <li class="fragment">Space state reduction &#x2192 reduce non-determinism</li>
-					</ul>
-				    </section>
-
-				    <section>
-					<h2>Time division</h2>
-					<img src="./img/fig5.jpg"/ width="70%"/>
-
+					<h3>Raft overview</h3>
+                                        <div style="margin-bottom:10px">
+                                            <p>Principle</p>
+                                            <ul>
+                                                <li>Leader manages the logs</li>
+                                                <li>Sends it to the others</li>
+                                                <li>When safe &#x2192 process it</li>
+                                                <li>Return result to the client</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <p>Time division</p>
+					    <img src="./img/fig5.jpg"/ width="50%"/>
+                                        </div>
                                         <aside class="notes">
                                             <ul>
                                                 <li>New election = new term </li>
@@ -195,8 +207,14 @@
                                     
                                     <section>
                                         <h3>Logs structure</h3>
-                                        <img src="./img/fig6.jpg"/ width="60%"/>
-
+                                        <img src="./img/fig6.jpg"/ width="50%"/>
+                                        <ul>
+                                            <li> Leader receive commands &#x2192 adds it to its logs</li>
+                                            <li> It is then replicated</li>
+                                            <li> When replicated on majority &#x2192 safe</li>
+                                            <li> When safe &#x2192 processed</li>
+                                        </ul>
+                                   
                                         <aside class="notes">
                                             <p>Request handled by leader &#x2192 easier to have order</p>
                                             <p>Logs have:</p>
@@ -206,6 +224,16 @@
                                                 <li>Index</li>
                                             </ul>
                                         </aside>
+                                    </section>
+
+                                    <section>
+                                        <h3>Consistency check</h3>
+                                        <img src="./img/fig7.jpg"/ width="50%"/>
+                                        <p>Leader crashes before commit &#x2192 inconsistency</p>
+                                        <ul>
+                                            <li>Leader find when start diverging</li>
+                                            <li>Overwritte with its logs</li>
+                                        </ul>
                                     </section>
 
                                     <section>
@@ -220,16 +248,29 @@
 
                                     <section>
                                         <h3>Joint Consensus</h3>
-                                        <div style="height:400px; left:50px; position:relative">
-                                            <div style="position:absolute">
+
+                                        <div style="height:350px; left:50px; position:relative">
+                                            <div style="position:absolute;">
                                                 <img src="./img/fig10.jpg"/ width="50%"/>
                                             </div>
                                             <div class="fragment" style="position:absolute; left:100px" >
                                                 <img src="./img/crossbar.png"/ width="50%" style="border:0; opacity:1"/>
                                             </div>
                                         </div>
-                                    </section>
 
+                                        <p class="fragment">Two-phases approach:</p>
+                                        <ul class="fragment">
+                                            <li>Transisition phase</li>
+                                            <li>Old and new configuration coexist</li>
+                                            <li>Can still operate</li>
+                                        </ul>
+                                        <aside class="notes">
+                                            <ul>
+                                                <li>Switch from old to new &#x2192 unsafe</li>
+                                                <li>Generally client request suspended</li>
+                                            </ul>
+                                        </aside>
+                                    </section>
                                 </section>
 
                                 <!-- ************************************************************************** -->
@@ -254,6 +295,15 @@
 
                                 <section>
                                     <h2>Conclusion</h2>
+                                    <ul>
+                                        <li>Understandability is important</li>
+                                        <li>Separation of the problem</li>
+                                        <ul>
+                                            <li>Leader election</li>
+                                            <li>Log replication</li>
+                                            <li>Membership changes</li>
+                                        </ul>
+                                    </ul>
                                 </section>
 			</div>
 
