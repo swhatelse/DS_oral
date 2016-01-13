@@ -46,7 +46,7 @@
 					<p>Diego Ongaro and John Ousterhout</p>
 					<p>Stanford University</p>
 					<p>USENIX ATC 2014</p>
-					<p>Best paper award</p>
+					<p><b>Best paper award</b></p>
 					</div>
 					<div style="bottom:10%; width:100%; position:absolute">
 						<small>Steven QUINITO MASNADA</small>
@@ -80,7 +80,7 @@
 						<h2>Another consensus algorithm</h2>
 						<h3>Why raft?</h3>
 						<ul>
-							<li>The problem with Paxos</li>
+							<li>The problem with (multi-)Paxos</li>
 							<ul>
 								<li>Difficult to understand</li>
 								<li>Architecture not suited for most practical systems</li>
@@ -196,9 +196,15 @@
                                         <img src="./img/fig4.jpg"/ width="60%"/>
                                     </section>
                                     <section>
-                                        <h2>Visualization made Ben Johnson</h2>
-					<iframe src="../thesecretlivesofdata/raft/index.html#election2" width="80%" height="600" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+                                        <h2>Visualization made by Ben Johnson</h2>
+					<iframe src="../thesecretlivesofdata/raft/index.html#election2" width="80%" height="500" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
 				    </section>
+
+                                    <aside class="notes">
+                                        <ul>
+                                            <li>From SkyLand Lab</li>
+                                        </ul>
+				    </aside>
 
                                 </section>
 
@@ -209,12 +215,12 @@
                                     
                                     <section>
                                         <h3>Logs structure</h3>
-                                        <img src="./img/fig6.jpg"/ width="50%"/>
+                                        <img src="./img/fig6.jpg"/ width="40%"/>
                                         <ul>
                                             <li> Leader receive commands &#x2192 adds it to its logs</li>
-                                            <li> It is then replicated</li>
-                                            <li> When replicated on majority &#x2192 safe</li>
-                                            <li> When safe &#x2192 processed</li>
+                                            <li> Replicates it</li>
+                                            <li> When replicated on majority &#x2192 "safe"</li>
+                                            <li> Committed &#x2192 processed</li>
                                         </ul>
                                    
                                         <aside class="notes">
@@ -225,12 +231,14 @@
                                                 <li>Term number</li>
                                                 <li>Index</li>
                                             </ul>
+                                            <p>Raft ensure that a commited logs entry will eventually be executed by all available state machine</p>
+                                            <p>Commit also previous entries</p>
                                         </aside>
                                     </section>
 
                                     <section>
                                         <h3>Consistency check</h3>
-                                        <img src="./img/fig7.jpg"/ width="50%"/>
+                                        <img src="./img/fig7.jpg"/ width="40%"/>
                                         <p>Leader crashes before commit &#x2192 inconsistency</p>
                                         <ul>
                                             <li>Leader find when start diverging</li>
@@ -239,19 +247,57 @@
                                     </section>
 
                                     <section>
-                                        <iframe src="../thesecretlivesofdata/raft/index.html#replication2" width="80%" height="600" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+                                        <iframe src="../thesecretlivesofdata/raft/index.html#replication2" width="80%" height="500" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
                                     </section>
                                     
                                     <!-- Test image -->
+                                    <!-- <section>
+                                         <h3>Illustration</h3>
+                                         <div style="position:relative">
+                                         <div ><img src="../schema/replication/replication1.jpg"/ width="80%"/></div>
+                                         <div class="fragment" style="position:absolute; top:0px"><img src="../schema/replication/replication2.jpg"/ width="80%"/></div>
+                                         <div class="fragment" style="position:absolute; top:0px"><img src="../schema/replication/replication3.jpg"/ width="80%"/></div>
+                                         <div class="fragment" style="position:absolute; top:0px"><img src="../schema/replication/replication4.jpg"/ width="80%"/></div>
+                                         <div class="fragment" style="position:absolute; top:0px"><img src="../schema/replication/replication5.jpg"/ width="80%"/></div>
+                                         </div>
+                                         </section> -->
+                                </section>
+
+                                <section>
                                     <section>
-                                        <h3>Illustration</h3>
-                                        <div style="position:relative">
-                                        <div ><img src="../schema/replication/replication1.jpg"/ width="80%"/></div>
-                                        <div class="fragment" style="position:absolute; top:0px"><img src="../schema/replication/replication2.jpg"/ width="80%"/></div>
-                                        <div class="fragment" style="position:absolute; top:0px"><img src="../schema/replication/replication3.jpg"/ width="80%"/></div>
-                                        <div class="fragment" style="position:absolute; top:0px"><img src="../schema/replication/replication4.jpg"/ width="80%"/></div>
-                                        <div class="fragment" style="position:absolute; top:0px"><img src="../schema/replication/replication5.jpg"/ width="80%"/></div>
-                                        </div>
+                                        <h2>Safety</h2>
+                                    </section>
+                                    <section>
+                                        <h3>Restrictions</h3>
+
+                                        <p><u>Leader election :</u></p>
+                                        <ul>
+                                            <li>Up-to-date server</li>
+                                            <li>Checking logs informations</li>
+                                        </ul>
+
+                                        <p><u>Entries commitment :</u></p>
+                                        <div><img src="./img/fig8.jpg"/ width="40%"/></div>
+                                        <ul>
+                                            <li>Log matching property</li>
+                                            <li>Committed logs commited with new ones</li>
+                                        </ul>
+                                        <aside class="notes">
+                                            <p>Leader election:</p>
+                                            <ul>
+                                                <li>Leader must have all the committed entries</li>
+                                                <li>index and terms of the last entries</li>
+                                            </ul>
+                                            <p>Logs commitment</p>
+                                            <ul>
+                                                <li>Entry replicated on majority but not commited yet</li>
+                                                <li>Leader will try to replicate old entry</li>
+                                            </ul>
+                                            <p>Log matching property:
+                                                if two logs contains an entry with the same number of term and index then all the logs are identical in all entries up to he given index
+                                            </p>
+					</aside>
+
                                     </section>
                                 </section>
                                 
@@ -299,12 +345,25 @@
                                         <h2>Understandability</h2>
                                         <img src="./img/fig12.jpg"/ width="40%"/>
 				        <img src="./img/fig13.jpg"/ width="50%"/>
+                                        <aside class="notes">
+                                            <ul>
+                                                <li>AVG 4.9 point better for Paxos </li>
+                                            </ul>
+                                        </aside>
                                     </section>
 
                                     <section>
                                         <h2>Performances</h2>
                                         <img src="./img/fig14.jpg"/ width="60%"/>
                                     </section>
+
+                                    <aside class="notes">
+                                        <ul>
+                                            <li>Logs replication efficiency</li>
+                                            <li>Time to election to converge</li>
+                                            <li>Down time</li>
+                                        </ul>
+                                    </aside>
                                 </section>
 
                                 <section>
@@ -315,6 +374,7 @@
                                         <ul>
                                             <li>Leader election</li>
                                             <li>Log replication</li>
+                                            <li>Safety</li>
                                             <li>Membership changes</li>
                                         </ul>
                                     </ul>
